@@ -1,9 +1,9 @@
 # Next-translate-routes
 
-Translated routing and more for Next `/pages` router using Next regular file-base routing system
+Translated routing and more for Next using Next regular file-base routing system
 
 - [Features](#features)
-  - [Unsupported features](#unsupported-features)
+  - [Yet unsupported features](#yet-unsupported-features)
 - [Motivation](#motivation)
 - [How to](#how-to)
   - [Basic usage](#basic-usage)
@@ -12,7 +12,6 @@ Translated routing and more for Next `/pages` router using Next regular file-bas
     3. [Wrap your `\_app` component with the `withTranslateRoutes` hoc](#3-wrap-you-_app-component-with-the-withtranslateroutes-hoc)
     4. [Use `next-translate-routes/link` instead of `next/link`](#4-use-next-translate-routeslink-instead-of-nextlink)
     5. [Use `next-translate-routes/router instead` of `next/router` for singleton router (default export)](#5-use-next-translate-routesrouter-instead-of-nextrouter-for-singleton-router-default-export)
-    6. [Use a middleware to redirect from urls prefixed by default locale](#6-use-a-middleware-to-redirect-from-urls-with-the-default-locale-prefix)
   - [Advanced usage](#advanced-usage)
     - [Configuration](#configuration)
     - [Translate/untranslate urls](#translateuntranslate-urls)
@@ -47,11 +46,15 @@ Translated routing and more for Next `/pages` router using Next regular file-bas
 
 See it in action: <https://codesandbox.io/s/github/hozana/next-translate-routes/tree/master>
 
-### Unsupported features
+### Yet unsupported features
 
-- **`/app` router is not supported**: with `/app` router, you can use [next-roots](https://www.npmjs.com/package/next-roots).
 - Html static export is not and will never be supported by next-translate-routes, since internationalized routing is among [static html export unsupported features](https://nextjs.org/docs/advanced-features/static-html-export#unsupported-features).
-- Domain routing is not supported yet but could be in the future. Any help would be appreciated, see [here](https://github.com/hozana/next-translate-routes/issues/20#issuecomment-1571882827).
+- Domain routing is not supported yet but should be in the future.
+- Next 13 is not supported yet too. There is two steps here:
+  - supporting next 13 without `app/` directory: it nearly works, but there is some issues. To fix them, we need to figure out what is optimistic navigation. If anyone has a clue, please open an issue to discuss it!
+  - supporting the `app/` directory. And that won't be a piece of cake...
+
+Any PR are welcome!
 
 ## Motivation
 
@@ -219,16 +222,6 @@ import singletonRouter from 'next-translate-routes/router'
 import singletonRouter from 'next/router'
 ```
 
-#### 6. Use a middleware to redirect from urls with the default locale prefix
-
-If `en` is the default locale for example, you probably will want to:
-
-- either redirect `/en` to `/` and `/en/anywhere` to `/anywhere`,
-- or redirect from `/` to `/en` and `/anywhere` to `/en/anywhere`.
-
-This is complex: next-translate-routes cannot handle this without creating a looping redirect.
-The only way to do this seems to be using the middleware, as stated [here](https://github.com/vercel/next.js/discussions/18419#discussioncomment-1561577).
-
 ### Advanced usage
 
 Check the example folder to see some advanced techniques in action.
@@ -320,28 +313,6 @@ See [@JacbSoderblom's suggestion](https://github.com/hozana/next-translate-route
 ```
 
 For a catch all route: `"[...path]": ":path*"`.
-
-You can use a constrained dynamic path segment in the root of your application too.
-
-```none
-/pages/
- ├ [side]/
- | ├ index.tsx
- | └ _routes.yml
- ├ somewhere.tsx
- └ _app.tsx
-
-```
-
-```yml
-# /pages/[side]/_routes.yml
----
-"/":
-  default: :side(heads|tails) # Important!
-  en: :side(heads|tails)
-  fr: :side(pile|face)
-  es: :side(cara|cruz)
-```
 
 #### Ignoring a path part
 

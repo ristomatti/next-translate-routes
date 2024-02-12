@@ -21,7 +21,7 @@ const nextjsDataHeaderCheck: Pick<Redirect, 'missing'> = {
 const sourceToDestination = (sourcePath: string) =>
   sourcePath.replace(/[{}]|(:\w+)\([^)]+\)/g, (_match, arg) => arg || '')
 
-const staticSegmentRegex = /^[\w-]+$|^\([\w|-]+\)$/
+const staticSegmentRegex = /^[\w-_]+$|^\([\w-_|]+\)$/
 
 /**
  * Find index of a similar redirect/rewrite
@@ -52,7 +52,7 @@ const getSimilarIndex = <R extends Redirect | Rewrite>(sourceSegments: string[],
  * mergeOrRegex('(one|two|tree)', 'tree') => '(one|two|tree)'
  */
 const mergeOrRegex = (existingRegex: string, newPossiblity: string) => {
-  const existingPossibilities = existingRegex.replace(/[()]/g, '').split('|')
+  const existingPossibilities = existingRegex.replace(/\(|\)/g, '').split('|')
   return existingPossibilities.includes(newPossiblity)
     ? existingRegex
     : `(${[...existingPossibilities, newPossiblity].join('|')})`
@@ -89,7 +89,7 @@ export const getPageReRoutes = <L extends TAnyLocale>(routeSegments: TRouteSegme
   /** File path in path-to-regexp syntax (cannot be customised in routes data files) */
   const basePath = `/${routeSegments
     .map(({ name, paths: { default: defaultPath } }) => {
-      const match = ignoreSegmentPathRegex.exec(defaultPath) || []
+      const match = defaultPath.match(ignoreSegmentPathRegex) || []
       // If a pattern is added to the ignore token ".", add it behind #ignorePattern
       return fileNameToPath(name) + (match[1] || '')
     })
@@ -126,8 +126,7 @@ export const getPageReRoutes = <L extends TAnyLocale>(routeSegments: TRouteSegme
   /** REDIRECTS */
   const redirects = locales.reduce((acc, locale) => {
     const localePath = getFullLocalePath(locale, routeSegments)
-    const prefix = locale === defaultLocale ? '' : `/${locale}`
-    const destination = `${prefix}${sourceToDestination(localePath)}`
+    const destination = `${locale === defaultLocale ? '' : `/${locale}`}${sourceToDestination(localePath)}`
 
     return [
       ...acc,
@@ -209,7 +208,7 @@ export const getPageReRoutes = <L extends TAnyLocale>(routeSegments: TRouteSegme
             .map((similarSegment, index) =>
               similarSegment === sourceSegments[index]
                 ? similarSegment
-                : `(${similarSegment.replace(/[()]/g, '').split('|').concat(sourceSegments[index]).join('|')})`,
+                : `(${similarSegment.replace(/\(|\)/g, '').split('|').concat(sourceSegments[index]).join('|')})`,
             )
             .join('/'),
         },

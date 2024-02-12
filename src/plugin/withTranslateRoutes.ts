@@ -1,6 +1,6 @@
 import type { Redirect, Rewrite } from 'next/dist/lib/load-custom-routes'
 import type { NextConfig } from 'next/dist/server/config-shared'
-import { type Configuration as WebpackConfiguration, type FileCacheOptions } from 'webpack'
+import type { Configuration as WebpackConfiguration, FileCacheOptions } from 'webpack'
 
 import { setNtrData } from '../shared/ntrData'
 import { ntrMessagePrefix } from '../shared/withNtrPrefix'
@@ -57,8 +57,6 @@ export const withTranslateRoutes = (userNextConfig: NextConfigWithNTR): NextConf
   return {
     ...nextConfig,
 
-    transpilePackages: [...(nextConfig.transpilePackages || []), 'next-translate-routes'],
-
     webpack(conf: WebpackConfiguration, context) {
       const config =
         typeof nextConfig.webpack === 'function' ? (nextConfig.webpack(conf, context) as WebpackConfiguration) : conf
@@ -75,7 +73,7 @@ export const withTranslateRoutes = (userNextConfig: NextConfigWithNTR): NextConf
       }
       config.module.rules.push({
         test: new RegExp(
-          `${pagesPath.replace(/[/\\]/g, '(\\\\|\\/)')}_app\\.(${context.config.pageExtensions.join('|')})$`,
+          `${pagesPath.replace(/\\|\//g, '(\\\\|\\/)')}_app\\.(${context.config.pageExtensions.join('|')})$`,
         ),
         use: {
           loader: 'next-translate-routes/loader',
