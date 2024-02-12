@@ -22,13 +22,15 @@ export type TNtrData<L extends TAnyLocale = string> = {
   defaultLocale: L
   locales: L[]
   routesTree: TRouteBranch<L>
-  fallbackLng?: TFallbackLng
+  fallbackLng?: TFallbackLng | undefined
 }
 
 export type NTRConfig = {
+  debug?: boolean
   routesDataFileName?: string
+  routesTree?: TRouteBranch
   pagesDirectory?: string
-} & Pick<TNtrData, 'debug' | 'routesTree'>
+}
 
 export type NTRI18NConfig = {
   fallbackLng?: TFallbackLng
@@ -47,8 +49,6 @@ export type NextConfigCompleteWithNTR = NextConfigComplete & { i18n: NTRI18NConf
 declare global {
   // eslint-disable-next-line no-var
   var __NEXT_TRANSLATE_ROUTES_DATA: TNtrData
-  // eslint-disable-next-line no-var
-  var ROUTER_CONTEXT_PATH: string
 
   interface Window {
     __NEXT_TRANSLATE_ROUTES_DATA: TNtrData

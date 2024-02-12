@@ -18,12 +18,12 @@ const getFallbackLngs = (lng: string): string[] | undefined => {
  *
  * Ex:
  * ```
- * getLocalePathFromPaths({ default: 'here', fr: 'ici', es: 'aqui' }, 'fr') // 'ici'
+ * getPathFromPaths({ default: 'here', fr: 'ici', es: 'aqui' }, 'fr') // 'ici'
  *
  * // If no fallbackLng is defined:
- * getLocalePathFromPaths({ default: 'here', fr: 'ici', es: 'aqui' }, 'pt') // 'here'
+ * getPathFromPaths({ default: 'here', fr: 'ici', es: 'aqui' }, 'pt') // 'here'
  * // If ntrData.fallbackLng.pt === ['es', 'fr'], then:
- * getLocalePathFromPaths({ default: 'here', fr: 'ici', es: 'aqui' }, 'pt') // 'aqui'
+ * getPathFromPaths({ default: 'here', fr: 'ici', es: 'aqui' }, 'pt') // 'aqui'
  * ```
  */
 export const getLocalePathFromPaths = <L extends string>({
