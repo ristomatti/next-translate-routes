@@ -1,3 +1,5 @@
+import nextPackageJson from 'next/package.json'
+
 const parseVersion = (version?: string) =>
   version
     ?.match(/(\d+)(?:\.(\d+))?(?:\.(\d+))?/)
@@ -15,7 +17,7 @@ export const checkNextVersion = (
   fallback = false,
 ) => {
   const referenceVersion = parseVersion(version)
-  const nextVersion = parseVersion(process.env?.npm_package_dependencies_next)
+  const nextVersion = parseVersion(nextPackageJson.version)
 
   if (!referenceVersion || !nextVersion) {
     return fallback
@@ -24,10 +26,9 @@ export const checkNextVersion = (
   let comparison = 0
 
   for (let i = 0; i < referenceVersion.length; i++) {
-    if (nextVersion[i] > referenceVersion[i]) {
-      comparison = 1
-    } else if (nextVersion[i] < referenceVersion[i]) {
-      comparison = -1
+    if (nextVersion[i] !== referenceVersion[i]) {
+      comparison = nextVersion[i] > referenceVersion[i] ? 1 : -1
+      break
     }
   }
 

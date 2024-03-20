@@ -8,6 +8,17 @@ import { checkNextVersion } from './checkNextVersion'
 import { fileNameToPath } from './fileNameToPaths'
 import { getLocalePathFromPaths } from './getPathFromPaths'
 
+/** Prevent prefetches redirections and rewrites. See #49 and https://github.com/vercel/next.js/issues/39531 */
+const getNextjsDataHeaderCheck = (): Pick<Redirect, 'missing'> | false =>
+  checkNextVersion('>=13.3.0') && {
+    missing: [
+      {
+        type: 'header',
+        key: 'x-nextjs-data',
+      },
+    ],
+  }
+
 /** Remove brackets and custom regexp from source to get valid destination */
 const sourceToDestination = (sourcePath: string) =>
   sourcePath.replace(/[{}]|(:\w+)\([^)]+\)/g, (_match, arg) => arg || '')
@@ -117,7 +128,8 @@ export const getPageReRoutes = <L extends TAnyLocale>(routeSegments: TRouteSegme
   /** REDIRECTS */
   const redirects = locales.reduce((acc, locale) => {
     const localePath = getFullLocalePath(locale, routeSegments)
-    const destination = `${locale === defaultLocale ? '' : `/${locale}`}${sourceToDestination(localePath)}`
+    const prefix = locale === defaultLocale ? '' : `/${locale}`
+    const destination = `${prefix}${sourceToDestination(localePath)}`
 
     return [
       ...acc,
@@ -167,15 +179,7 @@ export const getPageReRoutes = <L extends TAnyLocale>(routeSegments: TRouteSegme
             permanent: false,
             // Take source locale into account
             locale: false as const,
-            ...(checkNextVersion('>=13.3') && {
-              // Prevent prefetches redirection. See #49 and https://github.com/vercel/next.js/issues/39531
-              missing: [
-                {
-                  type: 'header',
-                  key: 'x-nextjs-data',
-                },
-              ],
-            }),
+            ...getNextjsDataHeaderCheck(),
           },
         ]
       }, [] as Redirect[]),
