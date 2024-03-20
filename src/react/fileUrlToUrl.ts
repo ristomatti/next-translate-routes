@@ -109,6 +109,7 @@ export const getTranslatedPathPattern = ({
  *
  * @param url Next default file url
  * @param locale The target locale
+ * @param option Options
  * @param option.throwOnError (Default to true) Throw if the input url does not match any page
  *
  * @returns The url string or undefined if no page matched and option.throwOnError is set to false
