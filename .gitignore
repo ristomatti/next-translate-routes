@@ -1,13 +1,4 @@
-# Yarn
 node_modules
-yarn-error.log
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
 
 # IDE
 .vscode
