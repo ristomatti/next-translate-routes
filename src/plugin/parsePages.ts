@@ -63,7 +63,7 @@ export const parsePages = <L extends string>({
     : ''
   const routeSegmentsData = (
     routeSegmentsFileContent
-      ? (/\.yaml$/.test(routesFileName as string) ? YAML : JSON).parse(routeSegmentsFileContent)
+      ? (/\.ya?ml$/.test(routesFileName as string) ? YAML : JSON).parse(routeSegmentsFileContent)
       : {}
   ) as TRouteSegmentsData<L>
   const directoryPathParts = directoryPath.replace(/[\\/]/, '').split(/[\\/]/)

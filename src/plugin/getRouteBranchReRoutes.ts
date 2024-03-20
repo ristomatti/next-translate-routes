@@ -126,7 +126,8 @@ export const getPageReRoutes = <L extends TAnyLocale>(routeSegments: TRouteSegme
   /** REDIRECTS */
   const redirects = locales.reduce((acc, locale) => {
     const localePath = getFullLocalePath(locale, routeSegments)
-    const destination = `${locale === defaultLocale ? '' : `/${locale}`}${sourceToDestination(localePath)}`
+    const prefix = locale === defaultLocale ? '' : `/${locale}`
+    const destination = `${prefix}${sourceToDestination(localePath)}`
 
     return [
       ...acc,
@@ -222,7 +223,6 @@ export const getPageReRoutes = <L extends TAnyLocale>(routeSegments: TRouteSegme
       {
         source,
         destination,
-        ...nextjsDataHeaderCheck,
       },
     ]
   }, [] as Rewrite[])
