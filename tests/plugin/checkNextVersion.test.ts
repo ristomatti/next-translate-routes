@@ -1,13 +1,14 @@
-/* eslint-disable prettier/prettier */
+/* eslint-disable */
 /**
  * @jest-environment node
  */
 const mockedNextPackageJson = { version: '12.3.1' }
-jest.mock('next/package.json', () => (mockedNextPackageJson))
 
-import { checkNextVersion } from '../../src/plugin/checkNextVersion'
+jest.mock('next/package.json', () => mockedNextPackageJson)
 
-const versionTests: { current: string, comparison: Parameters<typeof checkNextVersion>[0], expected: boolean }[] = [
+const { checkNextVersion } = require('../../src/plugin/checkNextVersion')
+
+const versionTests: { current: string; comparison: Parameters<typeof checkNextVersion>[0]; expected: boolean }[] = [
   { current: '13.3.1', comparison: '>=13.3.0', expected: true },
   { current: '12.3.1', comparison: '>=13.3.0', expected: false },
   { current: '12.3.1', comparison: '<13.3.0', expected: true },
