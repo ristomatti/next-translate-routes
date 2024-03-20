@@ -1,4 +1,3 @@
-// import type { NextConfig } from 'next/dist/server/config-shared'
 import type { NextConfigWithNTR, NTRNextConfig, TNtrData } from '../types'
 import { getPagesPath } from './getPagesPath'
 import { parsePages } from './parsePages'
