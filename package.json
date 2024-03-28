@@ -21,6 +21,8 @@
     "build:clean": "rimraf plugin react shared ./*.d.ts ./*.js.map ./*.js",
     "build": "npm run build:clean && tsc",
     "format": "prettier -c --write .",
+    "tsc": "tsc --noEmit --project .",
+    "tsc:watch": "tsc --noEmit --watch --project .",
     "lint": "eslint --ignore-path .gitignore src",
     "test": "jest",
     "prerelease": "npm lint && npm run build",
