@@ -5,12 +5,12 @@ node_modules
 .idea
 
 # Build
-/plugin
-/react
-/shared
-/*.js
-/*.map
-/*.d.ts
+#/plugin
+#/react
+#/shared
+#/*.js
+#/*.map
+#/*.d.ts
 
 # Other
 TODO.md
